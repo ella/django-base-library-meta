@@ -1,5 +1,11 @@
 #!/bin/bash
 
+[[ $# -eq 3 ]] || {
+	echo USAGE:
+	echo $0 DIR-PATH-TO-REPO NEW-PROJ-NAME NEW-LIB-NAME
+	exit
+}
+
 DIR=$1
 PROJ_NAME=$2
 LIB_NAME=$3
