@@ -1,14 +1,5 @@
 #!/bin/bash
 
-[[ $# -eq 2 ]] || {
-	echo USAGE:
-	echo $0 NEW-PROJ-NAME NEW-LIB-NAME
-	exit
-}
-
-PROJ_NAME=${1:-djbproj}
-LIB_NAME=${2:-djblib}
-
 function create_repo()
 {
 	REPO=$1
@@ -54,6 +45,7 @@ function move_files()
 
 function add_new_files()
 {
+	MSG="$1"
 	for i in $PROJ_NAME $LIB_NAME; do
 		cd $i
 		# git remove removed files
@@ -61,16 +53,9 @@ function add_new_files()
 		# add everything new
 		git add .
 		# and commit
-		git commit -m "automatic fork via $0 - base repository renamed"
+		[[ "$MSG" ]] && git commit -m "$MSG"
 		cd ..
 	done
 }
 
-create_repo django-base-project $PROJ_NAME
-create_repo django-base-library $LIB_NAME
-
-create_dirs
-move_files
-
-add_new_files
 
