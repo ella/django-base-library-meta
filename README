@@ -1,6 +1,5 @@
 
-convert.sh
-----------
-
-script for converting djangobaseproject into namedproject
+base.*.sh
+---------
+command for inital fork and automatic merge
 

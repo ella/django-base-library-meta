@@ -58,4 +58,13 @@ function add_new_files()
 	done
 }
 
+function print_help()
+{
+	APP=$0
+	[[ $# -eq 2 ]] || {
+		echo USAGE:
+		echo $APP NEW-PROJ-NAME NEW-LIB-NAME
+		exit
+	}
+}
 
