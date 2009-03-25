@@ -1,27 +1,66 @@
 #!/bin/bash
 
-[[ $# -eq 3 ]] || {
+[[ $# -eq 2 ]] || {
 	echo USAGE:
-	echo $0 DIR-PATH-TO-REPO NEW-PROJ-NAME NEW-LIB-NAME
+	echo $0 NEW-PROJ-NAME NEW-LIB-NAME
 	exit
 }
 
-DIR=$1
-PROJ_NAME=$2
-LIB_NAME=$3
+PROJ_NAME=${1:-djbproj}
+LIB_NAME=${2:-djblib}
 
-TMP=$(mktemp)
+function create_repo()
+{
+	REPO=$1
+	DIR=$2
 
-grep djangobaseproject $DIR/* -r -l | xargs echo sed -i "s/djangobaseproject/$PROJ_NAME/g" $TMP
-grep djangobaselibrary $DIR/* -r -l | xargs echo sed -i "s/djangobaselibrary/$LIB_NAME/g" $TMP
+	git clone ssh://githany.netcentrum.cz/projects/django/GIT/$REPO.git/ $DIR
 
-function rename() {
-	f=$1
-	n=$( echo $f | sed "s/djangobaseproject/$PROJ_NAME/g; s/djangobaselibrary/$LIB_NAME/g;" )
-	echo mkdir -p $( dirname $n )
-	echo mv $f $n
+	cd $DIR
+	git remote rename origin $REPO
+	git branch -M ${REPO}-master
+	git checkout -b master
+	cd ..
 }
 
-find $DIR/* -type d | while read f; do rename $f; done
-find $DIR/* -type f | while read f; do rename $f; done
+function new_filename()
+{
+	echo $1 | sed "s/djangobaseproject/$PROJ_NAME/g; s/djangobaselibrary/$LIB_NAME/g;"
+}
+
+function create_dirs()
+{
+	find $PROJ_NAME $LIB_NAME -type d | grep -v '\.git/' | while read i; do
+		ni=$( new_filename $i )
+		mkdir -p $ni
+	done
+}
+
+function move_files()
+{
+	find $PROJ_NAME $LIB_NAME -type f | grep -v '\.git/' | while read i; do
+		ni=$( new_filename $i )
+		sed -i "s/djangobaseproject/$PROJ_NAME/g; s/djangobaselibrary/$LIB_NAME/g" $i
+		mv $i $ni
+	done
+}
+
+function add_new_files()
+{
+	for i in $PROJ_NAME $LIB_NAME; do
+		cd $i
+		git diff-files --diff-filter=D --name-only | xargs git rm -q
+		git add .
+		git commit -m 'base repository renamed'
+		cd ..
+	done
+}
+
+create_repo django-base-project $PROJ_NAME
+create_repo django-base-library $LIB_NAME
+
+create_dirs
+move_files
+
+add_new_files
 
