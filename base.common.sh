@@ -8,7 +8,7 @@ function create_repo()
 	# create DIR, if the cloning fails, the rest of the script won't
 	mkdir $DIR
 
-	git clone ssh://githany.netcentrum.cz/projects/django/GIT/$REPO.git/ $DIR
+	git clone $REPO_PATH/$REPO.git/ $DIR
 
 	# renaming of the origin repo, because this will be fork of it
 	cd $DIR
