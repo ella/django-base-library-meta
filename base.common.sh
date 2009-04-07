@@ -6,14 +6,17 @@ function create_repo()
 	DIR=$2
 
 	# create DIR, if the cloning fails, the rest of the script won't
-	mkdir $DIR
+	mkdir $DIR || exit
+
 
 	git clone $REPO_PATH/$REPO.git/ $DIR
 
-	# renaming of the origin repo, because this will be fork of it
+	# fetching original repo
 	cd $DIR
-	git remote rename origin $REPO
-	git branch -M ${REPO}-master
+	git init
+	git remote add $REPO $REPO_PATH/$REPO.git/
+	git fetch $REPO
+	git checkout -b ${REPO}-master ${REPO}/master
 	git checkout -b master
 	cd ..
 }
