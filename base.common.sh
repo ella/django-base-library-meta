@@ -7,7 +7,7 @@ function create_repo ()
 
 	# create DIR, if the cloning fails, the rest of the script won't
 	mkdir $DIR &>/dev/null || {
-		echo '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' directory already exists
+		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' already exists
 		echo
 
 		print_help
