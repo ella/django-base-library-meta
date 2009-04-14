@@ -9,8 +9,6 @@ function create_repo()
 	mkdir $DIR || exit
 
 
-	git clone $REPO_PATH/$REPO.git/ $DIR
-
 	# fetching original repo
 	cd $DIR
 	git init
