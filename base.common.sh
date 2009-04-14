@@ -1,12 +1,17 @@
 #!/bin/bash
 
-function create_repo()
+function create_repo ()
 {
 	REPO=$1
 	DIR=$2
 
 	# create DIR, if the cloning fails, the rest of the script won't
-	mkdir $DIR || exit
+	mkdir $DIR &>/dev/null || {
+		echo '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' directory already exists
+		echo
+
+		print_help
+	}
 
 
 	# fetching original repo
@@ -19,12 +24,12 @@ function create_repo()
 	cd ..
 }
 
-function new_filename()
+function new_filename ()
 {
 	echo $1 | sed "s/djangobaseproject/$PROJ_NAME/g; s/djangobaselibrary/$LIB_NAME/g;"
 }
 
-function create_dirs()
+function create_dirs ()
 {
 	# create dirs with new names
 	find $PROJ_NAME $LIB_NAME -type d | grep -v '\.git/' | while read i; do
@@ -33,7 +38,7 @@ function create_dirs()
 	done
 }
 
-function move_files()
+function move_files ()
 {
 	# rename files and move to proper location
 	# any occurences of keywords inside the files are replaced as well
@@ -44,7 +49,7 @@ function move_files()
 	done
 }
 
-function add_new_files()
+function add_new_files ()
 {
 	MSG="$1"
 	for i in $PROJ_NAME $LIB_NAME; do
@@ -59,7 +64,7 @@ function add_new_files()
 	done
 }
 
-function print_help()
+function print_help ()
 {
 	APP=$0
 	[[ $# -eq 2 ]] || {
@@ -67,5 +72,21 @@ function print_help()
 		echo $APP NEW-PROJ-NAME NEW-LIB-NAME
 		exit
 	}
+}
+
+function print_farewell ()
+{
+	echo
+	echo "--------------------------------------------------------------------------------"
+	echo
+
+	echo project '"'$PROJ_NAME'"' and library '"'$LIB_NAME'"' created successfully
+	echo
+	echo don"'"t forget to: grep -rl "'"TODO: REPLACE"'" '"'$PROJ_NAME'"/*' '"'$LIB_NAME'"/*'
+	echo for all lines that must be renamed by hand
+
+	echo
+	echo bye...
+	echo
 }
 

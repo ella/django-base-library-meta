@@ -17,3 +17,5 @@ move_files
 
 add_new_files "automatic fork via $0"
 
+print_farewell
+
