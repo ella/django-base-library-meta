@@ -45,7 +45,7 @@ function move_files ()
 	find $PROJ_NAME $LIB_NAME -type f | grep -v '\.git/' | while read i; do
 		ni=$( new_filename $i )
 		sed -i "s/djangobaseproject/$PROJ_NAME/g; s/djangobaselibrary/$LIB_NAME/g" $i
-		mv $i $ni
+		[[ "$i" != "$ni" ]] && mv $i $ni
 	done
 }
 
