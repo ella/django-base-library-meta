@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_PATH=ssh://githany.netcentrum.cz/projects/django/GIT
+REPO_PATH=${REPO_PATH:-ssh://githany.netcentrum.cz/projects/django/GIT}
 PROJ_NAME=${1:-djbproj}
 LIB_NAME=${2:-djblib}
 PWD=$( cd $( dirname $0 ); pwd )
