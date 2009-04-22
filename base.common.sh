@@ -9,18 +9,39 @@ function create_repo ()
 	mkdir $DIR &>/dev/null || {
 		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' already exists
 		echo
-
 		print_help
 	}
 
+	add_remote_repo $REPO $DIR
 
 	# fetching original repo
 	cd $DIR
-	git init
-	git remote add $REPO $REPO_PATH/$REPO.git/
-	git fetch $REPO
-	git checkout -b ${REPO}-master ${REPO}/master
+
 	git checkout -b master
+
+	cd ..
+}
+
+function add_remote_repo ()
+{
+	REPO=$1
+	DIR=$2
+
+	cd $DIR &>/dev/null || {
+		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' does not exists
+		echo
+		print_help
+	}
+
+	# initialize git repo if not intialized before
+	[[ -d .git ]] || git init
+	# add remote and fetch it
+	git remote | grep -q $REPO || git remote add $REPO $REPO_PATH/$REPO.git/
+	git fetch $REPO
+	# actualize base tracking branch
+	git branch -d ${REPO}-master
+	git checkout -b ${REPO}-master ${REPO}/master
+
 	cd ..
 }
 
