@@ -27,16 +27,16 @@ function add_remote_repo ()
 	}
 
 	# initialize git repo if not intialized before
-	[[ -d .git ]] || git init
+	[[ -d .git ]] || git init && git checkout master
 	# add remote and fetch it
 	git remote | grep -q $REPO || git remote add $REPO $REPO_PATH/$REPO.git/
 	git fetch $REPO
 	# actualize base tracking branch
-	git branch -d ${REPO}-master
+	git branch -D ${REPO}-master
 	git checkout -b ${REPO}-master ${REPO}/master
 
 	# if master does not exist create it, otherwise just switch
-	git checkout -b master || g checkout master
+	git checkout -b master &>/dev/null || git checkout master
 
 	cd ..
 }
