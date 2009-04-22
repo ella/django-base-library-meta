@@ -13,13 +13,6 @@ function create_repo ()
 	}
 
 	add_remote_repo $REPO $DIR
-
-	# fetching original repo
-	cd $DIR
-
-	git checkout -b master
-
-	cd ..
 }
 
 function add_remote_repo ()
@@ -41,6 +34,9 @@ function add_remote_repo ()
 	# actualize base tracking branch
 	git branch -d ${REPO}-master
 	git checkout -b ${REPO}-master ${REPO}/master
+
+	# if master does not exist create it, otherwise just switch
+	git checkout -b master || g checkout master
 
 	cd ..
 }
