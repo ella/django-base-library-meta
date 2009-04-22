@@ -32,7 +32,7 @@ function add_remote_repo ()
 	git remote | grep -q $REPO || git remote add $REPO $REPO_PATH/$REPO.git/
 	git fetch $REPO
 	# actualize base tracking branch
-	git branch -D ${REPO}-master
+	git branch -D ${REPO}-master &>/dev/null
 	git checkout -b ${REPO}-master ${REPO}/master
 
 	# if master does not exist create it, otherwise just switch
