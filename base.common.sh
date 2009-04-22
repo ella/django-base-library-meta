@@ -1,30 +1,11 @@
 #!/bin/bash
 
-function create_repo ()
+function init_repo ()
 {
 	REPO=$1
 	DIR=$2
 
-	# create DIR, if the cloning fails, the rest of the script won't
-	mkdir $DIR &>/dev/null || {
-		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' already exists >&2
-		echo >&2
-		print_help >&2
-	}
-
-	add_remote_repo $REPO $DIR
-}
-
-function add_remote_repo ()
-{
-	REPO=$1
-	DIR=$2
-
-	cd $DIR &>/dev/null || {
-		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' does not exists >&2
-		echo >&2
-		print_help >&2
-	}
+	cd $DIR
 
 	# initialize git repo if not intialized before
 	[[ -d .git ]] && git checkout master || git init

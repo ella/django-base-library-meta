@@ -3,16 +3,27 @@
 REPO_PATH=${REPO_PATH:-ssh://githany.netcentrum.cz/projects/django/GIT}
 PROJ_NAME=${1:-djbproj}
 LIB_NAME=${2:-djblib}
+
 PWD=$( cd $( dirname $0 ); pwd )
+
+PROJ_NAME=$( echo $PROJ_NAME | sed 's|/\+$||' )
+LIB_NAME=$( echo $LIB_NAME | sed 's|/\+$||' )
 
 source ${PWD}/base.common.sh
 
 print_help $*
 
-echo create_repo django-base-project $PROJ_NAME
-create_repo django-base-project $PROJ_NAME > /dev/null
-echo create_repo django-base-library $LIB_NAME
-create_repo django-base-library $LIB_NAME > /dev/null
+# create DIR, if the cloning fails, the rest of the script won't
+mkdir $PROJ_NAME &>/dev/null && mkdir $LIB_NAME &>/dev/null || {
+	echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' already exists >&2
+	echo >&2
+	print_help >&2
+}
+
+echo init_repo django-base-project $PROJ_NAME
+init_repo django-base-project $PROJ_NAME > /dev/null
+echo init_repo django-base-library $LIB_NAME
+init_repo django-base-library $LIB_NAME > /dev/null
 
 echo create_dirs
 create_dirs > /dev/null
