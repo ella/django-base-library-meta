@@ -7,9 +7,9 @@ function create_repo ()
 
 	# create DIR, if the cloning fails, the rest of the script won't
 	mkdir $DIR &>/dev/null || {
-		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' already exists
-		echo
-		print_help
+		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' already exists >&2
+		echo >&2
+		print_help >&2
 	}
 
 	add_remote_repo $REPO $DIR
@@ -21,13 +21,13 @@ function add_remote_repo ()
 	DIR=$2
 
 	cd $DIR &>/dev/null || {
-		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' does not exists
-		echo
-		print_help
+		echo directory '"'$PROJ_NAME'"' or '"'$LIB_NAME'"' does not exists >&2
+		echo >&2
+		print_help >&2
 	}
 
 	# initialize git repo if not intialized before
-	[[ -d .git ]] || git init && git checkout master
+	[[ -d .git ]] && git checkout master || git init
 	# add remote and fetch it
 	git remote | grep -q $REPO || git remote add $REPO $REPO_PATH/$REPO.git/
 	git fetch $REPO
@@ -37,6 +37,24 @@ function add_remote_repo ()
 
 	# if master does not exist create it, otherwise just switch
 	git checkout -b master &>/dev/null || git checkout master
+
+	cd ..
+}
+
+function merge_repo ()
+{
+	# TODO:
+	#   better way of doing this would be to create forked version
+	#   of new repo and this merge into the old one
+
+	REPO=$1
+	DIR=$2
+
+	cd $DIR
+
+	git merge --no-commit ${REPO}-master
+	[[ $( git --no-pager diff --cached | wc -l ) -gt 0 ]] && git reset HEAD .
+	[[ $( git --no-pager diff --cached | wc -l ) -gt 0 ]] && git reset HEAD .
 
 	cd ..
 }

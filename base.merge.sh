@@ -9,11 +9,20 @@ source ${PWD}/base.common.sh
 
 print_help $*
 
-add_remote_repo django-base-project $PROJ_NAME
-add_remote_repo django-base-library $LIB_NAME
+echo add_remote_repo django-base-project $PROJ_NAME
+add_remote_repo django-base-project $PROJ_NAME > /dev/null
+echo add_remote_repo django-base-library $LIB_NAME
+add_remote_repo django-base-library $LIB_NAME > /dev/null
 
-#create_dirs
-#move_files
+echo merge_repo django-base-project $PROJ_NAME
+merge_repo django-base-project $PROJ_NAME > /dev/null
+echo merge_repo django-base-library $LIB_NAME
+merge_repo django-base-library $LIB_NAME > /dev/null
+
+echo create_dirs
+create_dirs > /dev/null
+echo move_files
+move_files > /dev/null
 
 #add_new_files "automatic merge via $0"
 

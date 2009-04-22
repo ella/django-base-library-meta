@@ -9,13 +9,18 @@ source ${PWD}/base.common.sh
 
 print_help $*
 
-create_repo django-base-project $PROJ_NAME
-create_repo django-base-library $LIB_NAME
+echo create_repo django-base-project $PROJ_NAME
+create_repo django-base-project $PROJ_NAME > /dev/null
+echo create_repo django-base-library $LIB_NAME
+create_repo django-base-library $LIB_NAME > /dev/null
 
-create_dirs
-move_files
+echo create_dirs
+create_dirs > /dev/null
+echo move_files
+move_files > /dev/null
 
-add_new_files "automatic fork via $0"
+echo commit
+add_new_files "automatic fork via $0" > /dev/null
 
 print_farewell
 
