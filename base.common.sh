@@ -5,6 +5,7 @@ function init_repo ()
 	REPO=$1
 	DIR=$2
 	BRANCH=$3
+	WRK_BRANCH=${BRANCH}-tmp
 
 	cd $DIR
 
@@ -20,24 +21,27 @@ function init_repo ()
 	# if master does not exist create it, otherwise just switch
 	git checkout -b master &>/dev/null || git checkout master
 
+	# and now switch to work branch
+	git checkout -b ${REPO}-${WRK_BRANCH} ${REPO}-${BRANCH} || git checkout ${REPO}-${WRK_BRANCH}
+
+	# and just try to pull in new stuff
+	git merge ${REPO}/${BRANCH}
+
 	cd ..
 }
 
 function merge_repo ()
 {
-	# TODO:
-	#   better way of doing this would be to create forked version
-	#   of new repo and this merge into the old one
-
 	REPO=$1
 	DIR=$2
 	BRANCH=$3
+	WRK_BRANCH=${BRANCH}-tmp
+	COMMIT=${4:---no-commit}
 
 	cd $DIR
 
-	git merge --no-commit ${REPO}-${BRANCH}
-	[[ $( git --no-pager diff --cached | wc -l ) -gt 0 ]] && git reset HEAD .
-	[[ $( git --no-pager diff --cached | wc -l ) -gt 0 ]] && git reset HEAD .
+	git checkout master
+	git merge $COMMIT ${REPO}-${WRK_BRANCH}
 
 	cd ..
 }
@@ -73,7 +77,7 @@ function add_new_files ()
 	for i in $PROJ_NAME $LIB_NAME; do
 		cd $i
 		# git remove removed files
-		git diff-files --diff-filter=D --name-only | xargs git rm -q
+		git diff-files --diff-filter=D --name-only | xargs git rm -q -f --
 		# add everything new
 		git add .
 		# and commit
