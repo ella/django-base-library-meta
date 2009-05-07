@@ -4,6 +4,7 @@ function init_repo ()
 {
 	REPO=$1
 	DIR=$2
+	BRANCH=$3
 
 	cd $DIR
 
@@ -13,8 +14,8 @@ function init_repo ()
 	git remote | grep -q $REPO || git remote add $REPO $REPO_PATH/$REPO.git/
 	git fetch $REPO
 	# actualize base tracking branch
-	git branch -D ${REPO}-master &>/dev/null
-	git checkout -b ${REPO}-master ${REPO}/master
+	git branch -D ${REPO}-${BRANCH} &>/dev/null
+	git checkout -b ${REPO}-${BRANCH} ${REPO}/${BRANCH}
 
 	# if master does not exist create it, otherwise just switch
 	git checkout -b master &>/dev/null || git checkout master
@@ -30,10 +31,11 @@ function merge_repo ()
 
 	REPO=$1
 	DIR=$2
+	BRANCH=$3
 
 	cd $DIR
 
-	git merge --no-commit ${REPO}-master
+	git merge --no-commit ${REPO}-${BRANCH}
 	[[ $( git --no-pager diff --cached | wc -l ) -gt 0 ]] && git reset HEAD .
 	[[ $( git --no-pager diff --cached | wc -l ) -gt 0 ]] && git reset HEAD .
 
@@ -83,9 +85,9 @@ function add_new_files ()
 function print_help ()
 {
 	APP=$0
-	[[ $# -eq 2 ]] || {
+	[[ $# -lt 2 ]] && {
 		echo USAGE:
-		echo $APP NEW-PROJ-NAME NEW-LIB-NAME
+		echo "$APP NEW-PROJ-NAME NEW-LIB-NAME [PROJ-BRANCH-NAME] [LIB-BRANCH-NAME]"
 		exit
 	}
 }

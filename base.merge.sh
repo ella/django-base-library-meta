@@ -4,6 +4,9 @@ REPO_PATH=${REPO_PATH:-ssh://githany.netcentrum.cz/projects/django/GIT}
 PROJ_NAME=${1:-djbproj}
 LIB_NAME=${2:-djblib}
 
+PROJ_BRANCH=${3:-master}
+LIB_BRANCH=${4:-master}
+
 PWD=$( cd $( dirname $0 ); pwd )
 
 PROJ_NAME=$( echo $PROJ_NAME | sed 's|/\+$||' )
@@ -20,15 +23,12 @@ print_help $*
 	print_help >&2
 }
 
-echo init_repo django-base-project $PROJ_NAME
-init_repo django-base-project $PROJ_NAME > /dev/null
-echo init_repo django-base-library $LIB_NAME
-init_repo django-base-library $LIB_NAME > /dev/null
-
-echo merge_repo django-base-project $PROJ_NAME
-merge_repo django-base-project $PROJ_NAME > /dev/null
-echo merge_repo django-base-library $LIB_NAME
-merge_repo django-base-library $LIB_NAME > /dev/null
+for COMMAND in init_repo merge_repo; do
+	for ARGS in "django-base-project $PROJ_NAME $PROJ_BRANCH" "django-base-library $LIB_NAME $LIB_BRANCH"; do
+		echo $COMMAND $ARGS
+		$COMMAND $ARGS > /dev/null
+	done
+done
 
 echo create_dirs
 create_dirs > /dev/null
