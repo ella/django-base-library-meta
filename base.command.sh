@@ -38,7 +38,7 @@ echo move_files
 move_files > /dev/null
 
 echo commit
-add_new_files $ADD_MESSAGE > /dev/null
+add_new_files "$ADD_MESSAGE" > /dev/null
 
 COMMAND=merge_repo
 for ARGS in \
