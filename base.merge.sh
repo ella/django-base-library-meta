@@ -2,9 +2,15 @@
 
 PWD=$( cd $( dirname $0 ); pwd )
 
-function test_dirs() {
+function test_dirs ()
+{
 	# test existance of directories we will be working on
 	! [[ -d $PROJ_NAME ]] || ! [[ -d $LIB_NAME ]]
+}
+
+function exit_func ()
+{
+	true
 }
 
 ERROR_MESSAGE="does not exists"

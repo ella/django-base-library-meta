@@ -2,9 +2,15 @@
 
 PWD=$( cd $( dirname $0 ); pwd )
 
-function test_dirs() {
+function test_dirs ()
+{
 	# create DIR, if the cloning fails, the rest of the script won't
 	! mkdir $PROJ_NAME &>/dev/null || ! mkdir $LIB_NAME &>/dev/null
+}
+
+function exit_func ()
+{
+	print_farewell
 }
 
 ERROR_MESSAGE="already exists"

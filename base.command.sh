@@ -49,5 +49,5 @@ for ARGS in \
 	$COMMAND $ARGS > /dev/null
 done
 
-$exit_func
+exit_func
 
