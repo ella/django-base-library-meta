@@ -12,7 +12,8 @@ function init_repo ()
 	# initialize git repo if not intialized before
 	[[ -d .git ]] && git checkout master || git init
 	# add remote and fetch it
-	git remote | grep -q $REPO || git remote add $REPO $REPO_PATH/$REPO.git/
+	git remote rm $REPO
+	git remote add $REPO $REPO_PATH/$REPO.git/
 	git fetch $REPO
 	# actualize base tracking branch
 	git branch -D ${REPO}-${BRANCH} &>/dev/null
