@@ -23,8 +23,11 @@ print_help $*
 	print_help >&2
 }
 
-for ARGS in "django-base-project $PROJ_NAME $PROJ_BRANCH" "django-base-library $LIB_NAME $LIB_BRANCH"; do
-	COMMAND=init_repo
+COMMAND=init_repo
+for ARGS in \
+	"django-base-project $PROJ_NAME $PROJ_BRANCH" \
+	"django-base-library $LIB_NAME  $LIB_BRANCH"  \
+; do
 	echo $COMMAND $ARGS
 	$COMMAND $ARGS > /dev/null
 done
@@ -37,10 +40,12 @@ move_files > /dev/null
 echo commit
 add_new_files "automatic merge via $0" > /dev/null
 
-for ARGS in "django-base-project $PROJ_NAME $PROJ_BRANCH --no-commit" "django-base-library $LIB_NAME $LIB_BRANCH --no-commit"; do
-	COMMAND=merge_repo
+COMMAND=merge_repo
+for ARGS in \
+	"django-base-project $PROJ_NAME $PROJ_BRANCH --no-commit" \
+	"django-base-library $LIB_NAME  $LIB_BRANCH  --no-commit" \
+; do
 	echo $COMMAND $ARGS
 	$COMMAND $ARGS > /dev/null
 done
-
 
