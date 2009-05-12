@@ -55,7 +55,7 @@ function new_filename ()
 function create_dirs ()
 {
 	# create dirs with new names
-	find $PROJ_NAME $LIB_NAME -type d | grep -v '\.git/' | while read i; do
+	find ${PROJ_NAME}/ ${LIB_NAME}/ -type d | grep -v '\.git/' | while read i; do
 		ni=$( new_filename $i )
 		mkdir -p $ni
 	done
@@ -65,7 +65,7 @@ function move_files ()
 {
 	# rename files and move to proper location
 	# any occurences of keywords inside the files are replaced as well
-	find $PROJ_NAME $LIB_NAME -type f | grep -v '\.git/' | while read i; do
+	find ${PROJ_NAME}/ ${LIB_NAME}/ -type f | grep -v '\.git/' | while read i; do
 		ni=$( new_filename $i )
 		sed -i "s/djangobaseproject/$PROJ_NAME/g; s/djangobaselibrary/$LIB_NAME/g" $i
 		[[ "$i" != "$ni" ]] && mv $i $ni
