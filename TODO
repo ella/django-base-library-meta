@@ -7,6 +7,8 @@ Tue May 12 17:01:53 CEST 2009
 * mazat pri migraci toto TODO
   pridat changelog.template a pri migraci jim nahradit changelog
 
+* upravit description v debian (je tam Django Base Project)
+
 
 -------------------------------------------------------------
 
