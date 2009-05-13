@@ -42,7 +42,7 @@ function merge_repo ()
 	cd $DIR
 
 	git checkout master
-	git merge $COMMIT ${REPO}-${WRK_BRANCH}
+	git merge $COMMIT --no-ff ${REPO}-${WRK_BRANCH}
 
 	cd ..
 }
